@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
+@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css');
+body{
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    place-items: center;
+    background: #121316;
+}
+
+:root{
+    --color: #2589ff;
+    --del: #ff2566;
+    --bg: #252629;
+    --bg-lght: #404142;
+    --bg-drk: #1e1f22;
+    --text: #ffffff67;
+    --text-l: #ffffff8a;
+    --board: #191a1d;
+    --outline: #ffffff11;
+    --bx-shd: 0 0 8px 4px #5353532f;
+    --c-bx-shd: 0 0 6px 3px #00a2ff8a;
+}
+
+*{
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+*::-webkit-scrollbar{
+    height: 4px;
+}
+
+*::-webkit-scrollbar-track{
+    background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb{
+    background: var(--bg-lght);
+    border-radius: 5px;
+    transition: all .5s ease-in-out !important;
+}
+
+*::-webkit-scrollbar-thumb:hover{
+    background: var(--color);
+}
+
+input, button{
+    border: none;
+}
+/* input, button */
+button:focus{
+    outline: 1.5px solid var(--color);
+}
+
+header{
+    position: relative;
+    padding-block: 12px;
+    width: 260px;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+    background-color: var(--color);
+    /* box-shadow: var(--c-bx-shd); */
+}
+
+.photolab{
+    position: relative;
+    height: 80vh;
+    width: 97vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    /* background-color: cadetblue; */
+}
+
+.photolab .lab{
+    overflow: hidden;
+    position: relative;
+    padding: 10px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    background-color: var(--board);
+    /* box-shadow: var(--bx-shd); */
+}
+
+.lab display{
+    height: 95%;
+    width: 79%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 2px dashed var(--color); */
+}
+
+display canvas{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+.lab editor{
+    position: relative;
+    height: 95%;
+    width: 20%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    outline: 2px solid var(--outline);
+    gap: 18px;
+}
+
+editor div{
+    position: relative;
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 14px;
+    background-color: var(--bg-drk);
+    transition: all .2s ease-in-out;
+}
+
+editor div h6{
+    padding-inline: 5px;
+    color: var(--text);
+    font-weight: 600;
+}
+
+editor div input[type="number"]{
+    height: 20px;
+    width: 30px;
+    color: var(--text-l);
+    font-size: .8rem;
+    border-radius: 5px;
+    background-color: var(--bg);
+    transition: all .2s ease-in-out;
+}
+
+editor div input[type="number"]::-webkit-inner-spin-button{
+    display: none;
+}
+
+editor div:is(:hover, :focus) input[type="number"]{
+    background-color: var(--bg-lght);
+}
+
+editor div input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 90px;
+    height: 2.5px;
+    background: var(--bg-lght);
+    border-radius: 5px;
+    background-image: linear-gradient(var(--color), var(--color));
+    background-size: 0% 100%;
+    background-repeat: no-repeat;
+}
+  
+editor div input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background: var(--bg-lght);
+    /* box-shadow: 0 0 2px 0 #555; */
+    transition: background .2s ease-in-out;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+}
+
+editor div input[type="range"]::-webkit-slider-thumb:is(:focus, :active){
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+editor div input[type="range"]::-webkit-slider-thumb:hover{
+    background: gray;
+}
+
+editor div input[type=range]::-webkit-slider-runnable-track  {
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+}
+
+editor div:hover{
+    background-color: var(--bg);
+}
+
+editor a{
+    position: absolute;
+    bottom: 1.5%;
+    text-decoration: none;
+    color: white;
+    height: 40px;
+    width: 225px;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg);
+    border-radius: 12px;
+    transition: all .1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+editor a:active{
+    transform: scale(.8);
+}
+
+editor a .fi{
+    height: 12px;
+    width: 12px;
+    margin-left: 5px;
+    margin-bottom: 8px;
+}
+
+editor[off]{
+    filter: opacity(45%);
+    pointer-events: none;
+}
+
+editor[on] a{
+    background-color: var(--color);
+}
+
+editor[on]{
+    filter: opacity(100%);
+    pointer-events: all;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles/style.css">
+    <!-- <script defer src="app/editor.js"></script> -->
+    <script defer src="app/editor.js"></script>
+    <title>PhotoLab</title>
+</head>
+<body>
+    <header class="title">
+        <h1>Photo <span>Lab</span></h1>
+    </header>
+
+    <section class="photolab" photolab>
+        <main class="lab" lab>
+            <display>
+                <canvas></canvas>
+            </display>
+            <editor off>
+                <!-- <details>
+                    <summary>Adjust</summary>
+                </details> -->
+                
+                <div>
+                    <h6>Brightness</h6>
+                    <input brightness type="range" value="50" min="0" max="100" adjust>
+                    <input type="number" value="50" min="0" max="100" filval>
+                </div>
+
+                <div>
+                    <h6>Contrast</h6>
+                    <input contrast type="range" value="50" min="0" max="100" adjust>
+                    <input type="number" value="50" min="0" max="100" filval>
+                </div>
+                <div>
+                    <h6>Sturation</h6>
+                    <input sturation type="range" value="50" min="0" max="100" adjust>
+                    <input type="number" value="50" min="0" max="100" filval>
+                </div>
+                <div>
+                    <h6>Hue</h6>
+                    <input hue type="range" value="0" min="0" max="100" adjust>
+                    <input type="number" value="0" min="0" max="100" filval>
+                </div>
+                <div>
+                    <h6>Sepia</h6>
+                    <input sepia type="range" value="0" min="0" max="100" adjust>
+                    <input type="number" value="0" min="0" max="100" filval>
+                </div>
+
+                <div>
+                    <h6>Blur</h6>
+                    <input blur type="range" value="0" min="0" max="100" adjust>
+                    <input type="number" value="0" min="0" max="255" filval>
+                </div>
+
+                <div>
+                    <h6>Gray Scale</h6>
+                    <input grayscale type="range" value="0" min="0" max="100" adjust>
+                    <input type="number" value="0" min="0" max="100" filval>
+                </div>
+
+                <div>
+                    <h6>Inversion</h6>
+                    <input inversion type="range" value="0" min="0" max="255" adjust>
+                    <input type="number" value="0" min="0" max="100" filval>
+                </div>
+
+                <action>
+                    <a save download="" href="canvas">save  <i class="fi fi-sr-cloud-download-alt"></i></a>
+                </action>
+            </editor>
+        </main>
+    </section>
+
+</body>
+</html>
