@@ -94,17 +94,21 @@ header{
 .lab display{
     height: 95%;
     width: 79%;
+    padding: 5px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    /* border: 2px dashed var(--color); */
+    /* align-items: center; */
+    /* background-color: burlywood; */
 }
 
 display canvas{
-    height: 100%;
-    width: 100%;
+    /* height: 645px; */
+    /* height: 100%; */
+    /* width: 965px; */
     object-fit: contain;
     object-position: center;
+    border: 2px dashed var(--del);
+    /* background-color: #ff2566; */
 }
 
 .lab editor{
@@ -166,7 +170,17 @@ editor div input[type="range"] {
     background-size: 0% 100%;
     background-repeat: no-repeat;
 }
-  
+
+editor div input[sturation]{
+    background: linear-gradient(to right, gray, var(--color)) !important;
+    background-image: none;
+
+}
+editor div input[hue]{
+    background: linear-gradient(to right, var(--del), #00ff00 ,var(--color)) !important;
+    background-image: none;
+}
+
 editor div input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;

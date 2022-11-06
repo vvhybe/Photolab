@@ -111,9 +111,3 @@ function brightness(val){
     ctx.putImageData(imageData, 0, 0);
     console.log(imageData);
 }
-
-
-function validImage(img){
-    const ImgTypes = ["image/bmp","image/gif","image/jpeg","image/pjpeg","image/png","image/svg+xml","image/webp","image/x-icon"];
-    return ImgTypes.includes(img.type);
-}
