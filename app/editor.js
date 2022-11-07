@@ -2,19 +2,25 @@ const display = document.querySelector("display");
 const editor = document.querySelector("editor");
 const saveBtn = document.querySelector("[save]");
 
-// Elements:
+/** Filter Inputs **/
+// filter range input:
 const Brightness = document.querySelector("[brightness]");
 const Contrast = document.querySelector("[contrast]");
-const Sturation = document.querySelector("[sturation]");
+const Saturation = document.querySelector("[saturation]");
 const Invert = document.querySelector("[invert]");
 
-const Filters = ["brightness", "contrast", "sturation", "hue", "blur", "grayscale", "sepia", "invert"];
+// filter num input for precice use:
+const BrightnessVal = document.querySelector("[brightness] + [filval]");
+const ContrastVal = document.querySelector("[contrast] + [filval]");
+const SaturationVal = document.querySelector("[saturation] + [filval]");
+const InvertVal = document.querySelector("[invert] + [filval]");
+
+const Filters = {brightness: 50, contrast: 50, saturation: 50, hue: 0, blur:0, grayscale:0, sepia:0, invert:0};
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d", {willReadFrequently: true});
 let w = canvas.width;
 let h = canvas.height;
-
 
 
 const img = new Image();
@@ -44,44 +50,37 @@ canvas.addEventListener("contextmenu", e=>{
     e.preventDefault();
 });
 
-Brightness.addEventListener("change", e=>{
-    console.log("inpt BR direction: ", Brightness.style.direction);
-    brightness(e.target.valueAsNumber);
-    // commitChanges();
-    // runFilters()
-})
 
-Contrast.addEventListener("change", e=>{
-    contrast(e.target.valueAsNumber);
-    // commitChanges();
-    // runFilters()
-})
+// applaying filter using range inputs:
+Brightness.onchange = runFilters;
+Contrast.onchange = runFilters;
+Saturation.onchange = runFilters;
+Invert.onchange = runFilters;
 
-Sturation.addEventListener("change", e=>{
-    sturation(e.target.valueAsNumber);
-    // commitChanges();
-    // runFilters()
-})
+// applaying filter using number inputs:
+BrightnessVal.onchange = runFilters;
+ContrastVal.onchange = runFilters;
+SaturationVal.onchange = runFilters;
+InvertVal.onchange = runFilters;
 
-
-
-Invert.addEventListener("change", e=>{
-    invert(e.target.valueAsNumber);
-    // commitChanges();
-    // runFilters()
-})
-
+// downloading the edited Image:
 saveBtn.addEventListener("click", save);
 
 function initEditor(){
-    Filters.forEach(filter => {
+    const filters = Object.keys(Filters);
+    filters.forEach(filter => {
         const filterInpt = document.querySelector(`input[${filter}]`);
         const filterVal = document.querySelector(`input[${filter}] + [filval]`);
-        filterInpt.style.backgroundSize = `${filterInpt.value}% 100%`;
-        filterVal.value = filterInpt.value;
-        filterInpt.addEventListener("input", ()=>{
-            filterInpt.style.backgroundSize = `${filterInpt.value}% 100%`;
-            filterVal.value = filterInpt.value;
+        filterInpt.style.backgroundSize = `${Filters[filter]}% 100%`;
+        filterInpt.value = Filters[filter];
+        filterVal.value = Filters[filter];
+        filterInpt.addEventListener("input", e=>{
+            filterInpt.style.backgroundSize = `${e.target.value}% 100%`;
+            filterVal.value = e.target.value;
+        });
+        filterVal.addEventListener("input", e=>{
+            filterInpt.style.backgroundSize = `${e.target.value}% 100%`;
+            filterInpt.value = e.target.value;
         });
     })
 }
@@ -102,7 +101,9 @@ function dragImage(e){
 function dropImage(e){
     e.stopPropagation();
     e.preventDefault();
+    initEditor();
     const IMG = e.dataTransfer.files[0];
+    if(!validImage(IMG)) return;
     imgName = IMG.name.substr(0, IMG.name.indexOf('.'));
     download = IMG.type;
     console.log(download);
@@ -125,76 +126,82 @@ function drawImage(img){
         ctx.drawImage(img, 0, 0);
         imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         originalpxs = imgData.data.slice();
-        // console.log(originalpxs);
     };
 }
 
 function runFilters(){
-    const BRIGHTNESS = Brightness.valueAsNumber;
-    const CONTRAST = Brightness.valueAsNumber;
-    const INVERT = Brightness.valueAsNumber;
-
     currentpxs = originalpxs.slice();
 
-    brightness(BRIGHTNESS);
-    contrast(CONTRAST);
-    invert(INVERT);
+    const BRIGHTNESS = Brightness.valueAsNumber;
+    const CONTRAST = Contrast.valueAsNumber;
+    const INVERT = Invert.valueAsNumber;
+    const SATURATION = Saturation.valueAsNumber;
+
+    // loop over every px in the img WxH -> x,y;
+    for (let x = 0; x < img.width; x++) {
+        for (let y = 0; y < img.height; y++) {
+            brightness(x, y, BRIGHTNESS);
+            contrast(x, y, CONTRAST);
+            saturation(x, y, SATURATION);
+            if(INVERT > 0){
+                invert(x, y, INVERT);
+            }
+        };
+    }
+
     commitChanges();
 }
 
 
 function commitChanges(){
-    const data = imgData.data;
-    for (let px = 0; px < data.length; px+=4) {
-        data[px] = originalpxs[px];
-        data[px+1] = originalpxs[px+1];
-        data[px+2] = originalpxs[px+2];
+    const datapx = imgData.data;
+    for (let px = 0; px < datapx.length; px+=4) {
+        datapx[px] = currentpxs[px];
+        datapx[px+1] = currentpxs[px+1];
+        datapx[px+2] = currentpxs[px+2];
     }
     ctx.putImageData(imgData, 0, 0);
 }
 
-/// filters algo: in every px val 
-function brightness(val){
-    const br = (val * 2) / 100;
-    // console.log("Brightness: ", br);
-    const data = imgData.data;
-    // const data = originalpxs;
+/** Filter effects in every px val of img**/
 
-    for (let px = 0; px < data.length; px+=4) {
-        if(br !== 0){
-            data[px] *= br; //red
-            data[px+1] *= br; //green
-            data[px+2] *= br; //blue
-        }else{
-            data[px]  = originalpxs[px];
-            data[px+1] = originalpxs[px+1];
-            data[px+2] = originalpxs[px+2];
-        }
-    }
-    ctx.putImageData(imgData, 0, 0);
+// The image is stored as a 1d array with rgba value red then green then blue and last is alpha;
+const R_OFFSET = 0;
+const G_OFFSET = 1;
+const B_OFFSET = 2;
+
+function brightness(x, y, val){
+    const ridx = indexPX(x, y) + R_OFFSET;
+    const gidx = indexPX(x, y) + G_OFFSET;
+    const bidx = indexPX(x, y) + B_OFFSET;
+
+    const bright = (val * 2) / 100;
+
+    currentpxs[ridx] = clamp(bright * currentpxs[ridx]);
+    currentpxs[gidx] = clamp(bright * currentpxs[gidx]);
+    currentpxs[bidx] = clamp(bright * currentpxs[bidx]);
 }
 
-function contrast(val){
+function contrast(x, y, val){
+    const ridx = indexPX(x, y) + R_OFFSET;
+    const gidx = indexPX(x, y) + G_OFFSET;
+    const bidx = indexPX(x, y) + B_OFFSET;
+
     const alpha = (val + 255) / 255;
-    const data = imgData.data;
-    // const data = originalpxs;
-    for (let px = 0; px < data.length; px+=4) {
-        if(val !== 0){
-            data[px] = alpha * (data[px] - 128) + 128;
-            data[px+1] = alpha * (data[px+1] - 128) + 128;
-            data[px+2] = alpha * (data[px+2] - 128) + 128;
-        }else{
-            data[px]  = originalpxs[px];
-            data[px+1] = originalpxs[px+1];
-            data[px+2] = originalpxs[px+2];
-        }
-    }
-    ctx.putImageData(imgData, 0, 0);
+
+    currentpxs[ridx] = clamp(alpha * (currentpxs[ridx] - 128) + 128);
+    currentpxs[gidx] = clamp(alpha * (currentpxs[gidx] - 128) + 128);
+    currentpxs[bidx] = clamp(alpha * (currentpxs[bidx] - 128) + 128);
 }
 
-function sturation(val){
-    const sv  = (val * 2) / 100;
-    const LR = 0.3086;  // constant to determine luminance of red. Similarly, for green and blue
+function saturation(x, y, val){
+    const ridx = indexPX(x, y) + R_OFFSET;
+    const gidx = indexPX(x, y) + G_OFFSET;
+    const bidx = indexPX(x, y) + B_OFFSET;
+
+    const sv  = (val * 2.23) / 100;
+    // constant to determine luminance of red. Similarly, for green and blue
+    const LR = 0.3086;  
     const LG = 0.6094;
     const LB = 0.0820;
 
@@ -205,45 +212,33 @@ function sturation(val){
     const gv = (1 - sv) * LG;
     const bv = (1 - sv) * LB;
 
-    const data = imgData.data;
-    for (let px = 0; px < data.length; px+=4) {
-        if(sv !== 0){
-            data[px] = (data[px] * srv + data[px+1] * gv + data[px+2] * bv);
-            data[px+1] = (data[px] * rv + data[px+1] * sgv + data[px+2] * bv);
-            data[px+1] = (data[px] * rv + data[px+1] * gv + data[px+2] * sbv);
-        }else{
-            data[px]  = originalpxs[px];
-            data[px+1] = originalpxs[px+1];
-            data[px+2] = originalpxs[px+2];
-        }
-    }
-    ctx.putImageData(imgData, 0, 0);
-
+    currentpxs[ridx] = clamp(currentpxs[ridx] * srv + currentpxs[gidx]  * gv + currentpxs[bidx] * bv);
+    currentpxs[gidx] = clamp(currentpxs[ridx] * rv + currentpxs[gidx]  * sgv + currentpxs[bidx] * bv);
+    currentpxs[bidx] = clamp(currentpxs[ridx] * rv + currentpxs[gidx]  * gv + currentpxs[bidx] * sbv);
 }
 
 function hue(val){
-    
+
 }
 
-function invert(val){
+function invert(x, y, val){
+    const ridx = indexPX(x, y) + R_OFFSET;
+    const gidx = indexPX(x, y) + G_OFFSET;
+    const bidx = indexPX(x, y) + B_OFFSET;
+
     const inv = (val * 255) / 100;
-    // console.log("Invert: ",inv);
-    const data = imgData.data;
-    for (let px = 0; px < data.length; px+=4) {
-        let r = originalpxs[px];
-        let g = originalpxs[px+1];
-        let b = originalpxs[px+2];
-        if(inv !== 0){
-            data[px] ^= inv; //red
-            data[px+1] ^= inv; //green
-            data[px+2] ^= inv; //blue
-        }else{
-            data[px] = r; //red
-            data[px+1] = g; //green
-            data[px+2] = b; //blue
-        }
-    }
-    ctx.putImageData(imgData, 0, 0);
+
+    currentpxs[ridx] = clamp(inv - currentpxs[ridx]); //red
+    currentpxs[gidx] = clamp(inv - currentpxs[gidx]); //green
+    currentpxs[bidx] = clamp(inv - currentpxs[bidx]); //blue  
+}
+
+function indexPX(x,y){
+    return (x + y * img.width) * 4;
+}
+
+function clamp(val){
+    return Math.max(0, Math.min(Math.floor(val), 255))
 }
 
 function save(){
@@ -256,10 +251,3 @@ function validImage(img){
     const ImgTypes = ["image/bmp","image/gif","image/jpeg","image/pjpeg","image/png","image/svg+xml","image/webp","image/x-icon"];
     return ImgTypes.includes(img.type);
 }
-
-// function scaleImg(img){
-//     // const scale = Math.min(w / img.naturalWidth, h / img.naturalHeight);
-//     // let x = (w / 2) - (img.naturalWidth / 2) * scale;
-//     // let y = (h / 2) - (img.naturalHeight / 2) * scale;
-//     // img.onload = ()=>{ ctx.drawImage(img, x, y, img.naturalWidth * scale, img.naturalHeight * scale) };
-// }

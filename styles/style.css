@@ -88,7 +88,6 @@ header{
     align-items: center;
     border-radius: 10px;
     background-color: var(--board);
-    /* box-shadow: var(--bx-shd); */
 }
 
 .lab display{
@@ -97,18 +96,13 @@ header{
     padding: 5px;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
-    /* background-color: burlywood; */
 }
 
 display canvas{
     /* height: 645px; */
-    /* height: 100%; */
     /* width: 965px; */
     object-fit: contain;
     object-position: center;
-    border: 2px dashed var(--del);
-    /* background-color: #ff2566; */
 }
 
 .lab editor{
@@ -146,6 +140,7 @@ editor div input[type="number"]{
     width: 30px;
     color: var(--text-l);
     font-size: .8rem;
+    border: none;
     border-radius: 5px;
     background-color: var(--bg);
     transition: all .2s ease-in-out;
@@ -155,6 +150,10 @@ editor div input[type="number"]::-webkit-inner-spin-button{
     display: none;
 }
 
+editor div input[type="number"]:focus{
+    outline: 2px solid var(--color);
+}
+
 editor div:is(:hover, :focus) input[type="number"]{
     background-color: var(--bg-lght);
 }
@@ -162,6 +161,7 @@ editor div:is(:hover, :focus) input[type="number"]{
 editor div input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
+    outline: none;
     width: 90px;
     height: 2.5px;
     background: var(--bg-lght);
@@ -188,17 +188,16 @@ editor div input[type="range"]::-webkit-slider-thumb {
     width: 10px;
     border-radius: 50%;
     background: var(--bg-lght);
-    /* box-shadow: 0 0 2px 0 #555; */
     transition: background .2s ease-in-out;
     cursor: grab;
-    cursor: -moz-grab;
-    cursor: -webkit-grab;
+}
+
+editor div input[type="range"]:focus::-webkit-slider-thumb{
+    background: var(--color) !important;
 }
 
 editor div input[type="range"]::-webkit-slider-thumb:is(:focus, :active){
     cursor: grabbing;
-    cursor: -moz-grabbing;
-    cursor: -webkit-grabbing;
 }
 
 editor div input[type="range"]::-webkit-slider-thumb:hover{
