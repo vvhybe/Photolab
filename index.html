@@ -4,27 +4,31 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="src/imgs/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="styles/style.css">
-    <!-- <script defer src="app/test.js"></script> -->
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+    <!-- filters script js -->
     <script defer src="app/editor.js"></script>
     <title>PhotoLab</title>
 </head>
 <body>
-    <header class="title">
-        <h1>Photo <span>Lab</span></h1>
+    <header>
+        <h1>Photo Lab</h1>
     </header>
+    <!-- Using Custom Elements to create Photolab web app -->
 
-    <section class="photolab" photolab>
-        <main class="lab" lab>
+    <photolab>
+        <lab>
             <display>
                 <canvas></canvas>
             </display>
             <editor off>
-                <!-- <details>
-                    <summary>Adjust</summary>
-                </details> -->
-                
                 <div>
                     <h6>Brightness</h6>
                     <input brightness type="range" value="50" min="0" max="100" adjust>
@@ -36,23 +40,13 @@
                     <input contrast type="range" value="50" min="0" max="100" adjust>
                     <input type="number" value="50" min="0" max="100" filval>
                 </div>
+                
                 <div>
                     <h6>Saturation</h6>
                     <input saturation type="range" value="50" min="0" max="100" adjust>
                     <input type="number" value="50" min="0" max="100" filval>
                 </div>
-                <div>
-                    <h6>Hue</h6>
-                    <input hue type="range" value="0" min="0" max="100" adjust>
-                    <input type="number" value="0" min="0" max="100" filval>
-                </div>
-                
-                <div>
-                    <h6>Blur</h6>
-                    <input blur type="range" value="0" min="0" max="100" adjust>
-                    <input type="number" value="0" min="0" max="255" filval>
-                </div>
-                
+
                 <div>
                     <h6>Gray Scale</h6>
                     <input grayscale type="range" value="0" min="0" max="100" adjust>
@@ -71,12 +65,48 @@
                     <input type="number" value="0" min="0" max="100" filval>
                 </div>
 
+                <div class="newfltr" title="swap red by green, green by blue, blue by red">
+                    <h6>Swap</h6>
+                    <input swap type="range" value="0" min="0" max="100" adjust>
+                    <input type="number" value="0" min="0" max="100" filval>
+                </div>
+
+                <div class="newfltr" title="reflect is invert filter but in swap way">
+                    <h6>Reflect</h6>
+                    <input reflect type="range" value="0" min="0" max="100" adjust>
+                    <input type="number" value="0" min="0" max="100" filval>
+                </div>
+
+                <details>
+                    <summary>RGB</summary>
+                    <channels>
+                        <div>
+                            <h6>Red</h6>
+                            <input red type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+    
+                        <div>
+                            <h6>Green</h6>
+                            <input green type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+    
+                        <div>
+                            <h6>Blue</h6>
+                            <input blue type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+                    </channels>
+                </details>
+
                 <action>
+                    <button reset-filters><i class="fi fi-br-refresh"></i></button>
                     <a save download="" href="canvas">save  <i class="fi fi-sr-cloud-download-alt"></i></a>
                 </action>
             </editor>
-        </main>
-    </section>
+        </lab>
+    </photolab>
 
 </body>
 </html>

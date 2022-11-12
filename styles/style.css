@@ -1,12 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
-@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css');
 body{
     padding: 0;
     height: 100vh;
     width: 100vw;
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 25px;
     background: #121316;
+}
+
+body::before{
+    position: absolute;
+    content: '';
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 91%;
+    width: 80%;
+    border-radius: 15px;
+    border: 2px solid var(--color);
 }
 
 :root{
@@ -20,7 +33,6 @@ body{
     --board: #191a1d;
     --outline: #ffffff11;
     --bx-shd: 0 0 8px 4px #5353532f;
-    --c-bx-shd: 0 0 6px 3px #00a2ff8a;
 }
 
 *{
@@ -50,37 +62,37 @@ body{
 input, button{
     border: none;
 }
-/* input, button */
+
 button:focus{
     outline: 1.5px solid var(--color);
 }
 
 header{
     position: relative;
-    padding-block: 12px;
-    width: 260px;
-    border-radius: 15px;
+    padding: 5px;
+    width: 200px;
+    border-radius: 25px;
     text-align: center;
-    color: white;
-    background-color: var(--color);
-    /* box-shadow: var(--c-bx-shd); */
+    font-size: .9rem;
+    color: var(--color);
+    background-color: #121316;
+    border: 2px solid var(--color);
 }
 
-.photolab{
+photolab{
     position: relative;
-    height: 80vh;
-    width: 97vw;
+    height: 82vh;
+    width: 95vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    /* background-color: cadetblue; */
 }
 
-.photolab .lab{
+photolab lab{
     overflow: hidden;
     position: relative;
-    padding: 10px;
+    padding: 5px 10px;
     height: 100%;
     width: 100%;
     display: flex;
@@ -90,7 +102,7 @@ header{
     background-color: var(--board);
 }
 
-.lab display{
+lab display{
     height: 95%;
     width: 79%;
     padding: 5px;
@@ -99,34 +111,59 @@ header{
 }
 
 display canvas{
-    /* height: 645px; */
-    /* width: 965px; */
+    height: 100%;
+    width: 100%;
     object-fit: contain;
     object-position: center;
 }
 
-.lab editor{
+lab editor, details{
     position: relative;
-    height: 95%;
-    width: 20%;
     padding: 10px;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
     outline: 2px solid var(--outline);
-    gap: 18px;
+    gap: 13px;
 }
 
-editor div{
+lab editor{
+    height: 99%;
+    width: 20%;
+}
+
+details{
+    color: var(--text);
+}
+
+channels{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+editor div, channels div{
     position: relative;
-    height: 40px;
+    height: 32px;
     width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border-radius: 14px;
+    border-radius: 12px;
     background-color: var(--bg-drk);
     transition: all .2s ease-in-out;
+}
+
+editor div.newfltr::before{
+    position: absolute;
+    content: '';
+    top: 6px;
+    left: 8px;
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    background-color: darkgoldenrod;
 }
 
 editor div h6{
@@ -171,13 +208,20 @@ editor div input[type="range"] {
     background-repeat: no-repeat;
 }
 
+editor div input[red]{
+    background: linear-gradient(to right, gray, #ff0000) !important;
+    background-image: none;
+}
+editor div input[green]{
+    background: linear-gradient(to right, gray, #00ff00) !important;
+    background-image: none;
+}
+editor div input[blue]{
+    background: linear-gradient(to right, gray, #0000ff) !important;
+    background-image: none;
+}
 editor div input[sturation]{
     background: linear-gradient(to right, gray, var(--color)) !important;
-    background-image: none;
-
-}
-editor div input[hue]{
-    background: linear-gradient(to right, var(--del), #00ff00 ,var(--color)) !important;
     background-image: none;
 }
 
@@ -216,20 +260,45 @@ editor div:hover{
     background-color: var(--bg);
 }
 
-editor a{
+editor action{
     position: absolute;
     bottom: 1.5%;
-    text-decoration: none;
-    color: white;
     height: 40px;
     width: 225px;
-    font-size: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+}
+
+action button, action button i, action a{
+    height: 100%;
+    text-decoration: none;
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 1.2rem;
+}
+
+action button, action a{
+    border: none;
     background-color: var(--bg);
     border-radius: 12px;
-    transition: all .1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+action button{
+    width: 20%;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+action a{
+    width: 75%;
+    transition: all .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+action button:hover{
+    background-color: var(--color);
 }
 
 editor a:active{
