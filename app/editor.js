@@ -34,11 +34,11 @@ const BlueVal = document.querySelector("[blue] + [filval]");
 
 // init the default values for the filters in js obj;
 // or we use the pre-asigned values to the localStorage
-const Filters = {brightness:50, contrast:50, saturation:50, grayscale:0, sepia:0, invert:0, swap:0, reflect:0, red:0, green:0, blue:0};
+const Filters = { brightness: 50, contrast: 50, saturation: 50, grayscale: 0, sepia: 0, invert: 0, swap: 0, reflect: 0, red: 0, green: 0, blue: 0 };
 const localFilters = JSON.parse(localStorage.getItem("Filters"));
 
 const canvas = document.querySelector("canvas");
-const ctx = canvas.getContext("2d", {willReadFrequently: true});
+const ctx = canvas.getContext("2d", { willReadFrequently: true });
 let w = canvas.width;
 let h = canvas.height;
 
@@ -54,23 +54,22 @@ const localOriginalImgDataSrc = localStorage.getItem("originalImgDataSrc");
 const edited = localStorage.getItem("imgedited");
 
 // obj for downloading the img:
-const download = JSON.parse(localStorage.getItem("download")) || {name:"image", type:"image/png"};
+const download = JSON.parse(localStorage.getItem("download")) || { name: "image", type: "image/png" };
 
 // init the editor values by the local saved iput value or by deafult, 
 //and draw localstorage img datasrc if exist draw the edited version or the standared version if not draw the placeholder img;
 initEditor(localFilters || Filters);
-if(localImgDataSrc){
+if (localImgDataSrc) {
     img.src = localImgDataSrc;
     drawImage(img);
     editor.setAttribute("on", "");
-}else{
+} else {
     defaultState();
 }
 
-canvas.addEventListener("dragover", e=>{ dragImage(e) });
-// canvas.addEventListener("dragleave", ()=>{ display.style.border = "none" });
-canvas.addEventListener("drop", e=>{ dropImage(e) });
-canvas.addEventListener("contextmenu", e=>{
+canvas.addEventListener("dragover", e => { dragImage(e) });
+canvas.addEventListener("drop", e => { dropImage(e) });
+canvas.addEventListener("contextmenu", e => {
     e.stopPropagation();
     e.preventDefault();
 });
@@ -107,7 +106,7 @@ saveBtn.addEventListener("click", save);
 // reset the filters and the editor:
 resetBtn.addEventListener("click", reset);
 
-function initEditor(Filters){
+function initEditor(Filters) {
     const filters = Object.keys(Filters);
     filters.forEach(filter => {
         const filterInpt = document.querySelector(`input[${filter}]`);
@@ -116,13 +115,13 @@ function initEditor(Filters){
         filterInpt.value = Filters[filter];
         filterVal.value = Filters[filter];
         // filter range grabbing effect;
-        filterInpt.addEventListener("input", e=>{
+        filterInpt.addEventListener("input", e => {
             filterInpt.style.backgroundSize = `${e.target.value}% 100%`;
             filterVal.value = e.target.value;
             Filters[filter] = e.target.valueAsNumber;
             localStorage.setItem("Filters", JSON.stringify(Filters));
         });
-        filterVal.addEventListener("input", e=>{
+        filterVal.addEventListener("input", e => {
             filterInpt.style.backgroundSize = `${e.target.value}% 100%`;
             filterInpt.value = e.target.value;
             Filters[filter] = e.target.valueAsNumber;
@@ -132,7 +131,7 @@ function initEditor(Filters){
 }
 
 // running the default display for the first time, and for the empty workspase
-function defaultState(){
+function defaultState() {
     const placeholder = new Image();
     placeholder.src = "src/imgs/placeholder.png";
     drawImage(placeholder);
@@ -140,46 +139,45 @@ function defaultState(){
 }
 
 // visualise the draggine img event by blue border
-function dragImage(e){
+function dragImage(e) {
     e.stopPropagation();
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
     display.style.border = "2px dashed var(--color)";
 }
 
-// draw the droped img and store 2 copies
-function dropImage(e){
+// draw the droped img and store 2 copies in localstorage one for reset other for the edited values;
+function dropImage(e) {
     e.stopPropagation();
     e.preventDefault();
-    display.style.border = "none"
+    display.style.border = "none";
     initEditor(Filters);
     localStorage.setItem("Filters", JSON.stringify(Filters));
     const IMG = e.dataTransfer.files[0];
     // if not supported img exit the programme: and alert the user;
-    if(!validImage(IMG)){
+    if (!validImage(IMG)) {
         alert(`this type of Image [${IMG.type}] not supported! 😓😥`);
-        return;  
+        return;
     }
     // the download setting to download the input img with the same type and name we input it;
     download.name = IMG.name.substr(0, IMG.name.indexOf('.'));
     download.type = IMG.type;
     localStorage.setItem("download", JSON.stringify(download));
     const reader = new FileReader();
-    reader.onload = ()=>{
+    reader.onload = () => {
         img.src = reader.result;
+        reasonableSize(reader.result);
         drawImage(img);
-        localStorage.setItem("imgDataSrc", reader.result);
-        localStorage.setItem("originalImgDataSrc", reader.result);
     }
-    
+
     reader.readAsDataURL(IMG);
     display.style.border = "none";
     editor.setAttribute("on", "");
 }
 
-function drawImage(img){
+function drawImage(img) {
     ctx.clearRect(0, 0, w, h);
-    img.onload = ()=>{
+    img.onload = () => {
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
         ctx.drawImage(img, 0, 0);
@@ -188,23 +186,22 @@ function drawImage(img){
 }
 
 // retrive the original imgdata;
-function getOriginalImgData(){
+function getOriginalImgData() {
     const img = new Image();
     img.src = localOriginalImgDataSrc;
     const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d", {willReadFrequently: true});
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    img.onload = ()=>{
+    img.onload = () => {
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
         ctx.drawImage(img, 0, 0);
         imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         originalpxs = imgData.data.slice();
-        console.log(originalpxs);
     };
 }
 
-function runFilters(){
+function runFilters() {
     currentpxs = originalpxs.slice();
 
     const BRIGHTNESS = Brightness.valueAsNumber;
@@ -243,36 +240,36 @@ function runFilters(){
 }
 
 
-function commitChanges(){
+function commitChanges() {
+    // ctx.clearRect(0, 0, w, h);
     const datapx = imgData.data;
-    for (let px = 0; px < datapx.length; px+=4) {
+    for (let px = 0; px < datapx.length; px += 4) {
         datapx[px] = currentpxs[px];
-        datapx[px+1] = currentpxs[px+1];
-        datapx[px+2] = currentpxs[px+2];
+        datapx[px + 1] = currentpxs[px + 1];
+        datapx[px + 2] = currentpxs[px + 2];
     }
     ctx.putImageData(imgData, 0, 0);
 }
 
-function save(){
-    const suffix = "PLB";
+function save() {
+    const suffix = "PL";
     saveBtn.href = canvas.toDataURL(download.type);
-    saveBtn.download = download.name +"-"+ suffix;
+    saveBtn.download = download.name + "-" + suffix;
 }
 
 /// to save every edit we do to the img and prevent it from losing; 
-function localsave(){
+function localsave() {
     const editedImgData = canvas.toDataURL(download);
     localStorage.setItem("imgDataSrc", editedImgData);
 }
 
 // reset the filters and also the editor input values and the localstorage for svaed edits;
-function reset(){
-    const Filters = {brightness:50, contrast:50, saturation:50, grayscale:0, sepia:0, invert:0, swap:0, reflect:0, red:0, green:0, blue:0};
+function reset() {
+    const Filters = { brightness: 50, contrast: 50, saturation: 50, grayscale: 0, sepia: 0, invert: 0, swap: 0, reflect: 0, red: 0, green: 0, blue: 0 };
     img.src = localOriginalImgDataSrc;
     drawImage(img);
     localStorage.setItem("imgDataSrc", localOriginalImgDataSrc);
     localStorage.setItem("Filters", JSON.stringify(Filters));
-    console.log(Filters);
     initEditor(Filters);
 }
 
@@ -284,7 +281,7 @@ const G_OFFSET = 1;
 const B_OFFSET = 2;
 const A_OFFSET = 3;
 
-function brightness(x, y, val){
+function brightness(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
@@ -296,7 +293,7 @@ function brightness(x, y, val){
     currentpxs[bidx] = clamp(bright * currentpxs[bidx]);
 }
 
-function contrast(x, y, val){
+function contrast(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
@@ -309,7 +306,7 @@ function contrast(x, y, val){
 }
 
 // manipulate the aplha channel by increasse or decreasse;
-function opacity(x, y, val){
+function opacity(x, y, val) {
     const aidx = indexPX(x, y) + A_OFFSET;
 
     const alpha = clamp((val * 255) / 100);
@@ -317,14 +314,14 @@ function opacity(x, y, val){
     currentpxs[aidx] = alpha;
 }
 
-function saturation(x, y, val){
+function saturation(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
 
-    const sv  = (val * 2.23) / 100;
+    const sv = (val * 2) / 100;
     // constant to determine luminance of red. Similarly, for green and blue
-    const LR = 0.3086;  
+    const LR = 0.3086;
     const LG = 0.6094;
     const LB = 0.0820;
 
@@ -335,9 +332,9 @@ function saturation(x, y, val){
     const gv = (1 - sv) * LG;
     const bv = (1 - sv) * LB;
 
-    currentpxs[ridx] = clamp(currentpxs[ridx] * srv + currentpxs[gidx]  * gv + currentpxs[bidx] * bv);
-    currentpxs[gidx] = clamp(currentpxs[ridx] * rv + currentpxs[gidx]  * sgv + currentpxs[bidx] * bv);
-    currentpxs[bidx] = clamp(currentpxs[ridx] * rv + currentpxs[gidx]  * gv + currentpxs[bidx] * sbv);
+    currentpxs[ridx] = clamp(currentpxs[ridx] * srv + currentpxs[gidx] * gv + currentpxs[bidx] * bv);
+    currentpxs[gidx] = clamp(currentpxs[ridx] * rv + currentpxs[gidx] * sgv + currentpxs[bidx] * bv);
+    currentpxs[bidx] = clamp(currentpxs[ridx] * rv + currentpxs[gidx] * gv + currentpxs[bidx] * sbv);
 }
 
 
@@ -345,7 +342,7 @@ function saturation(x, y, val){
 // Gray = (Red * 0.2126 + Green * 0.7152 + Blue * 0.0722)
 // not the avg algorithme:
 // Gray = (Red + Green + Blue) / 3
-function grayscale(x, y, val){
+function grayscale(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
@@ -365,7 +362,7 @@ function grayscale(x, y, val){
 //  newRed =   0.393*R + 0.769*G + 0.189*B
 //  newGreen = 0.349*R + 0.686*G + 0.168*B
 //  newBlue =  0.272*R + 0.534*G + 0.131*B
-function sepia(x, y, val){
+function sepia(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
@@ -391,7 +388,7 @@ function sepia(x, y, val){
 // r = g;
 // g = b;
 // b = t;
-function swap(x, y, val){
+function swap(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
@@ -404,7 +401,7 @@ function swap(x, y, val){
 
 /// reflect is a filter i made baisicaly if the invert but in a swap way;
 // r = 255 - g;  g = 255 - b;  b = 255 - r;
-function reflect(x, y, val){
+function reflect(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
@@ -413,14 +410,14 @@ function reflect(x, y, val){
 
     let temp = clamp(rfl - currentpxs[ridx]);
     currentpxs[ridx] = clamp(rfl - currentpxs[gidx]);
-    currentpxs[gidx] = clamp(rfl - currentpxs[bidx]); 
+    currentpxs[gidx] = clamp(rfl - currentpxs[bidx]);
     currentpxs[bidx] = temp;
 }
 
 // inverting the rgb value for every px data
 // by subtracting 255 from every rgbpx value
 // r = 255 - r;  g = 255 - g;  b = 255 - b;
-function invert(x, y, val){
+function invert(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
     const gidx = indexPX(x, y) + G_OFFSET;
     const bidx = indexPX(x, y) + B_OFFSET;
@@ -433,7 +430,7 @@ function invert(x, y, val){
 }
 
 /// manpulating the value of the rgb channels 
-function red(x, y, val){
+function red(x, y, val) {
     const ridx = indexPX(x, y) + R_OFFSET;
 
     const rv = clamp((val * 255) / 100);
@@ -441,7 +438,7 @@ function red(x, y, val){
     currentpxs[ridx] += rv;
 }
 
-function green(x, y, val){
+function green(x, y, val) {
     const gidx = indexPX(x, y) + G_OFFSET;
 
     const gv = clamp((val * 255) / 100);
@@ -449,7 +446,7 @@ function green(x, y, val){
     currentpxs[gidx] += gv;
 }
 
-function blue(x, y, val){
+function blue(x, y, val) {
     const bidx = indexPX(x, y) + B_OFFSET;
 
     const bv = clamp((val * 255) / 100);
@@ -457,16 +454,26 @@ function blue(x, y, val){
     currentpxs[bidx] += bv;
 }
 /// getting the index for px in the imgdata
-function indexPX(x,y){
+function indexPX(x, y) {
     return (x + y * img.width) * 4;
 }
 
 /// clamping the value to prevent the overflow by controled to be [0-255] the allowd rgb values;
-function clamp(val){
+function clamp(val) {
     return Math.max(0, Math.min(Math.floor(val), 255))
 }
 
-function validImage(img){
-    const ImgTypes = ["image/bmp","image/jpeg","image/pjpeg","image/png","image/svg+xml","image/webp","image/x-icon"];
+function reasonableSize(datasrc) {
+    try {
+        localStorage.setItem("imgDataSrc", datasrc);
+        localStorage.setItem("originalImgDataSrc", datasrc);
+    } catch {
+        console.warn("This image it too big to stored in localStorage!");
+        alert("⚠️ This image it too big, it can't be saved or restored after you refresh the page 👀, but the previous image will restored instead 🧑🏻‍💻!");
+    }
+}
+
+function validImage(img) {
+    const ImgTypes = ["image/bmp", "image/gif", "image/jpeg", "image/pjpeg", "image/png", "image/svg+xml", "image/webp", "image/x-icon"];
     return ImgTypes.includes(img.type);
 }
