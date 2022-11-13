@@ -16,7 +16,7 @@ ready to start processing your image by activating the editor sidebar after you 
 ![screenshot](src/screenshots/readytostart.png)
 
 - ### Processing:
-the processing is use the [`Canvas Api`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) withe the `2D Context` `canvas.getContext('2d');`
+the processing is use the [`Canvas Api`](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) withe the `2D Context`
 and image processing algorithms not usining any of `CSS filters` or `Context filters` `ctx.filter = "filter(val%)"`, none of that i create the filters algorithms from scratch with some `custom filters` that i made  like `swap filter` and `reflect filter`.
 
 ![screenshot](src/screenshots/processing.png)
