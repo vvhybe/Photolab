@@ -3,7 +3,7 @@ const editor = document.querySelector("editor");
 const resetBtn = document.querySelector("[reset-filters]");
 const saveBtn = document.querySelector("[save]");
 
-/** Filter Inputs **/
+/** Filter Inputs */
 // filter range input:
 const Brightness = document.querySelector("[brightness]");
 const Contrast = document.querySelector("[contrast]");
