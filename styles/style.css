@@ -49,18 +49,6 @@ button:focus{
     outline: 1.5px solid var(--color);
 }
 
-header{
-    position: relative;
-    padding: 2px;
-    width: 180px;
-    border-radius: 35px;
-    text-align: center;
-    font-size: .85rem;
-    color: var(--color);
-    background-color: #121316;
-    border: 2px solid var(--color);
-}
-
 photolab{
     position: relative;
     height: 92vh;
