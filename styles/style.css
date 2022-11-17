@@ -99,7 +99,7 @@ display canvas{
     object-position: center;
 }
 
-lab editor, channels{
+lab editor, filters, channels{
     position: relative;
     display: flex;
     flex-direction: column;
@@ -114,14 +114,14 @@ lab editor{
     outline: 2px solid var(--outline);
 }
 
-details{
-    padding: 5px;
+editor details{
+    padding: 10px;
     border-radius: 10px;
     outline: 2px solid var(--outline);
     color: var(--text);
 }
 
-editor div, channels div{
+filters div, channels div{
     position: relative;
     height: 32px;
     width: 100%;
@@ -136,8 +136,8 @@ editor div, channels div{
 editor div.newfltr::before{
     position: absolute;
     content: '';
-    top: 6px;
-    left: 8px;
+    top: 4px;
+    left: 6px;
     height: 6px;
     width: 6px;
     border-radius: 50%;

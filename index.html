@@ -26,56 +26,61 @@
                 <canvas></canvas>
             </display>
             <editor off>
-                <div>
-                    <h6>Brightness</h6>
-                    <input brightness type="range" value="50" min="0" max="100" adjust>
-                    <input type="number" value="50" min="0" max="100" filval>
-                </div>
-
-                <div>
-                    <h6>Contrast</h6>
-                    <input contrast type="range" value="50" min="0" max="100" adjust>
-                    <input type="number" value="50" min="0" max="100" filval>
-                </div>
-                
-                <div>
-                    <h6>Saturation</h6>
-                    <input saturation type="range" value="50" min="0" max="100" adjust>
-                    <input type="number" value="50" min="0" max="100" filval>
-                </div>
-
-                <div>
-                    <h6>Gray Scale</h6>
-                    <input grayscale type="range" value="0" min="0" max="100" adjust>
-                    <input type="number" value="0" min="0" max="100" filval>
-                </div>
-
-                <div>
-                    <h6>Sepia</h6>
-                    <input sepia type="range" value="0" min="0" max="100" adjust>
-                    <input type="number" value="0" min="0" max="100" filval>
-                </div>
-
-                <div>
-                    <h6>Inversion</h6>
-                    <input invert type="range" value="0" min="0" max="100" adjust>
-                    <input type="number" value="0" min="0" max="100" filval>
-                </div>
-
-                <div class="newfltr" title="swap red by green, green by blue, blue by red">
-                    <h6>Swap</h6>
-                    <input swap type="range" value="0" min="0" max="100" adjust>
-                    <input type="number" value="0" min="0" max="100" filval>
-                </div>
-
-                <div class="newfltr" title="reflect is invert filter but in swap way">
-                    <h6>Reflect</h6>
-                    <input reflect type="range" value="0" min="0" max="100" adjust>
-                    <input type="number" value="0" min="0" max="100" filval>
-                </div>
+                <details open>
+                    <summary>Filters:</summary>
+                    <filters>
+                        <div>
+                            <h6>Brightness</h6>
+                            <input brightness type="range" value="50" min="0" max="100" adjust>
+                            <input type="number" value="50" min="0" max="100" filval>
+                        </div>
+        
+                        <div>
+                            <h6>Contrast</h6>
+                            <input contrast type="range" value="50" min="0" max="100" adjust>
+                            <input type="number" value="50" min="0" max="100" filval>
+                        </div>
+                        
+                        <div>
+                            <h6>Saturation</h6>
+                            <input saturation type="range" value="50" min="0" max="100" adjust>
+                            <input type="number" value="50" min="0" max="100" filval>
+                        </div>
+        
+                        <div>
+                            <h6>Gray Scale</h6>
+                            <input grayscale type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+        
+                        <div>
+                            <h6>Sepia</h6>
+                            <input sepia type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+        
+                        <div>
+                            <h6>Inversion</h6>
+                            <input invert type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+        
+                        <div class="newfltr" title="swap red by green, green by blue, blue by red">
+                            <h6>Swap</h6>
+                            <input swap type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+        
+                        <div class="newfltr" title="reflect is invert filter but in swap way">
+                            <h6>Reflect</h6>
+                            <input reflect type="range" value="0" min="0" max="100" adjust>
+                            <input type="number" value="0" min="0" max="100" filval>
+                        </div>
+                    </filters>
+                </details>
 
                 <details>
-                    <summary>RGB</summary>
+                    <summary>RGB:</summary>
                     <channels>
                         <div>
                             <h6>Red</h6>
